@@ -10,10 +10,14 @@ public class LastDigit {
 	
 	
 	public static int stripLastDigit(int value){
-		String stringOfValue = Integer.toString(value);		
+		// 1. Convert int value to String
+		String stringOfValue = Integer.toString(value);
+		
+		// 2. Take last element of String
 		char lastChar = stringOfValue.charAt(stringOfValue.length()-1);
 		
-		int lastDigit = Integer.valueOf(lastChar);
+		// 3. Convert the last element to an int
+		int lastDigit = Character.getNumericValue(lastChar);
 		
 		return lastDigit;
 	}

@@ -1,4 +1,7 @@
 package examples;
+
+import static utilities.LastDigit.stripLastDigit;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -9,7 +12,7 @@ public class Example implements ActionListener {
 	
 	public static void main(String[] args){
 		
-
+		System.out.println(stripLastDigit(9));
 		
 	}
 	
