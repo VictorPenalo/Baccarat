@@ -3,8 +3,10 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.IOException;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,6 +14,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+
+import cards.Card;
+import baccarat.BaccaratGame;
 
 import java.util.Scanner;
 
@@ -152,6 +157,21 @@ public class Baccarat_GUI_draft extends JFrame {
 	
 	public static void main(String[] args) throws IOException {
 		Baccarat_GUI_draft pg = new Baccarat_GUI_draft();
+		
+		BaccaratGame baccaratGame = new BaccaratGame();
+		ArrayList<Card>[] hands = baccaratGame.startGame();
+		
+		
+		for (int i = 0; i < hands[0].size(); i++) {
+			pg.icons1[i].setIcon(card_to_ImageIcon2(hands[0].remove(i).getImageFileName()));
+		}
+		
+		for (int i = 0; i < hands[1].size(); i++) {
+			pg.icons2[i].setIcon(card_to_ImageIcon2(hands[1].remove(i).getImageFileName()));
+		} 
+		
+		pg.repaint();
+		
 	}
 	
 	public void refreshDisplay(String option){
@@ -195,6 +215,10 @@ public class Baccarat_GUI_draft extends JFrame {
 		else if(c[0]==13) fileString += "K";
 		else fileString += "A";
 		fileString += ".jpg";
+		return new ImageIcon(fileString);
+	}
+	
+	public static ImageIcon card_to_ImageIcon2(String fileString){
 		return new ImageIcon(fileString);
 	}
 

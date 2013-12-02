@@ -10,10 +10,9 @@ public abstract class AbstractBaccaratParticipant implements BaccaratParticipant
 	
 	private State state = State.none;
 	private Card lastDraw = null;
-	Deck deck;
+	private Deck deck;
 	public AbstractBaccaratParticipant(Deck deck) {
-		this.deck = deck;
-		
+		this.deck = deck;		
 	}
 
 	@Override
@@ -27,7 +26,7 @@ public abstract class AbstractBaccaratParticipant implements BaccaratParticipant
 	}
 	
 
-	ArrayList<Card> hand = new ArrayList<>();
+	private ArrayList<Card> hand = new ArrayList<>();
 	
 	@Override
 	public int getHandValue() {		
@@ -39,6 +38,11 @@ public abstract class AbstractBaccaratParticipant implements BaccaratParticipant
 		}
 		
 		return LastDigit.stripLastDigit(total);
+	}
+	
+	@Override
+	public ArrayList<Card> getHand(){
+		return hand;
 	}
 	
 	@Override
@@ -55,8 +59,7 @@ public abstract class AbstractBaccaratParticipant implements BaccaratParticipant
 	}
 	
 	public void clearHand(){
-		hand.clear();
-		
+		hand.clear();		
 	}
 
 	@Override

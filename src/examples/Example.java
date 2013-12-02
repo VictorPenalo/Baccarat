@@ -13,11 +13,6 @@ public class Example implements ActionListener {
 	
 	public static void main(String[] args){
 		
-		BaccaratGame game = new BaccaratGame();
-		
-		for (int i = 0; i < 5; i++) {
-			game.startGame();
-		}
 
 		
 	}

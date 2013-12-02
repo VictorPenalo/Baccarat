@@ -5,6 +5,7 @@ import static baccarat.State.stood_pat;
 
 import java.util.ArrayList;
 
+import cards.Card;
 import cards.Deck;
 
 public class BaccaratGame {
@@ -19,11 +20,18 @@ public class BaccaratGame {
 		this.player = new Player(deck);
 	}
 	
-	public void startGame(){
+	public ArrayList<Card>[] startGame(){
 		
+		player.clearHand();
+		banker.clearHand();
 		
 		player.getFirstHand();
 		banker.getFirstHand();
+		
+		return new ArrayList[]{player.getHand(), banker.getHand()};		
+	}
+	
+	public void continueGame(){				
 
 		// 1. Check if it's a natural
 		if(checkIfNatural()){
