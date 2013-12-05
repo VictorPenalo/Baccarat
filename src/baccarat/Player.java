@@ -13,7 +13,8 @@ public class Player extends AbstractBaccaratParticipant {
 	
 	public void placeBet(int bet){
 		assert( bet <= 5 && bet >=1);
-		betAmount = bet;		
+		betAmount = bet;
+		System.out.println("Player betAmount set to "+ betAmount);
 	}
 	
 	public void executeBetWon(boolean won){
@@ -28,8 +29,12 @@ public class Player extends AbstractBaccaratParticipant {
 		return purseValue;
 	}
 	
+	public int getBetAmount(){
+		return betAmount;
+	}
+	
 	@Override
 	public String toString() {	
-		return "Player with purse "+ purseValue;
+		return "Player";
 	}	
 }

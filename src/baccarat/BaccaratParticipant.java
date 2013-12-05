@@ -1,12 +1,10 @@
 package baccarat;
 
-import java.util.ArrayList;
-
 import cards.Card;
 
 public interface BaccaratParticipant {
 	
-	ArrayList<Card> getHand();
+	Card[] getHand();
 	
 	int getHandValue();	
 	/**

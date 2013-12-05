@@ -41,8 +41,8 @@ public abstract class AbstractBaccaratParticipant implements BaccaratParticipant
 	}
 	
 	@Override
-	public ArrayList<Card> getHand(){
-		return hand;
+	public Card[] getHand(){
+		return hand.toArray(new Card[0]);
 	}
 	
 	@Override

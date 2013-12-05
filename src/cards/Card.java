@@ -98,7 +98,7 @@ public enum Card {
 	/** 
 	 * @return The name of the image file corresponding to this @Card */
 	public String getImageFileName(){
-		String fileName = "playing_cards_images/Playing_card_" + suit + "_" + value + ".jpg";		
+		String fileName = "images/Playing_card_" + suit + "_" + value + ".jpg";		
 		return fileName;
 	}
 	

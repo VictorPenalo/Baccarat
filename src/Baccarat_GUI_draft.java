@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.IOException;
 
+import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,6 +18,9 @@ import javax.swing.border.LineBorder;
 
 import cards.Card;
 import baccarat.BaccaratGame;
+import baccarat.BaccaratParticipant;
+import baccarat.Banker;
+import baccarat.Player;
 
 import java.util.Scanner;
 
@@ -43,7 +47,8 @@ public class Baccarat_GUI_draft extends JFrame {
 	JLabel l22 = new JLabel();
 	JLabel[] icons1 = new JLabel[10];
 	JLabel[] icons2 = new JLabel[10];
-	int bet = 0;
+	JLabel[] icons3 = new JLabel[10];
+	int bet = 1;
 	JLabel l41 = new JLabel();
 	JButton b41 = new JButton("$1");
 	JButton b42 = new JButton("$2");
@@ -52,7 +57,7 @@ public class Baccarat_GUI_draft extends JFrame {
 	JButton b45 = new JButton("$5");
 	JLabel l42 = new JLabel();
 	JLabel l5 = new JLabel();
-	JButton b51 = new JButton("Continue");
+	JButton continueButton = new JButton("Continue");
 	JLabel l6 = new JLabel();
 	JButton nextButton = new JButton("Next");
 	// cards
@@ -95,15 +100,15 @@ public class Baccarat_GUI_draft extends JFrame {
 		l41.setText("Bet: ");
 		p5.add(l5);
 		l5.setText("Action: ");
-		p5.add(b51);
+		p5.add(continueButton);
 		p6.add(l6);
 		p6.add(nextButton);
-		b41.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) { refreshDisplay("b41"); } } );
-		b42.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) { refreshDisplay("b42"); } } );
-		b43.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) { refreshDisplay("b43"); } } );
-		b44.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) { refreshDisplay("b44"); } } );
-		b45.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) { refreshDisplay("b45"); } } );
-		b51.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) { refreshDisplay("b51"); } } );
+//		b41.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) { refreshDisplay("b41"); } } );
+//		b42.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) { refreshDisplay("b42"); } } );
+//		b43.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) { refreshDisplay("b43"); } } );
+//		b44.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) { refreshDisplay("b44"); } } );
+//		b45.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) { refreshDisplay("b45"); } } );
+		continueButton.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) { refreshDisplay("b51"); } } );
 		nextButton.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) { refreshDisplay("b6"); } } );
 		// ACTIONS
 		l1.setText("Round "+rounds+"          "+"Action: continue");
@@ -112,7 +117,7 @@ public class Baccarat_GUI_draft extends JFrame {
 		previous_cards[nop][0] = hand1[no1][0];
 		previous_cards[nop][1] = hand1[no1][1];
 		nop++;
-		no1++;
+		no1++;// no1 = 1
 		// generate one card
 		hand1[no1] = generate_card(previous_cards,nop);
 		previous_cards[nop][0] = hand1[no1][0];
@@ -131,47 +136,104 @@ public class Baccarat_GUI_draft extends JFrame {
 		previous_cards[nop][1] = hand2[no2][1];
 		nop++;
 		no2++;
-		for(int i=0; i<no1; i++){
-			icons1[i] = new JLabel();
-			icons1[i].setIcon(card_to_ImageIcon(hand1[i]));
-			icons1[i].setSize(30,30);
-			p211.add(icons1[i]);
-		}
-		for(int i=0; i<no2; i++){
-			icons2[i] = new JLabel();
-			icons2[i].setIcon(card_to_ImageIcon(hand2[i]));
-			p222.add(icons2[i]);
-		}
-		sum1 = sum_hand(hand1,no1);
-		sum2 = sum_hand(hand2,no2);
-		l21.setText("User - purse="+purse+"; sum="+ (sum1%10));
-		l22.setText("Computer - sum="+ (sum2%10));
-		bet = 0;
+//		for(int i=0; i<no1; i++){
+//			icons1[i] = new JLabel();
+//			icons1[i].setIcon(card_to_ImageIcon(hand1[i]));
+//			icons1[i].setSize(30,30);
+//			p211.add(icons1[i]);
+//		}
+//		for(int i=0; i<no2; i++){
+//			icons2[i] = new JLabel();
+//			icons2[i].setIcon(card_to_ImageIcon(hand2[i]));
+//			p222.add(icons2[i]);
+//		}
+//		sum1 = sum_hand(hand1,no1);
+//		sum2 = sum_hand(hand2,no2);
+//		l21.setText("User - purse="+purse+"; sum="+ (sum1%10));
+//		l22.setText("Computer - sum="+ (sum2%10));
+		bet = 1;
 		l42.setText("Bet: $"+bet);
-		l6.setText("Result:        => New purse: $   ");
-		b51.disable();
-		nextButton.disable();
-		setVisible(true);
-		repaint();
+		continueButton.setEnabled(false);
+		nextButton.setEnabled(false);
+//		setVisible(true);
+//		repaint();
 	}
 	
 	public static void main(String[] args) throws IOException {
-		Baccarat_GUI_draft pg = new Baccarat_GUI_draft();
+		final Baccarat_GUI_draft pg = new Baccarat_GUI_draft();
+		final BaccaratGame baccaratGame = new BaccaratGame();
 		
-		BaccaratGame baccaratGame = new BaccaratGame();
-		ArrayList<Card>[] hands = baccaratGame.startGame();
+		BaccaratParticipant[] participants = baccaratGame.startGame();
 		
+		final Player player = (Player) participants[0];
+		final Banker banker = (Banker) participants[1];
 		
-		for (int i = 0; i < hands[0].size(); i++) {
-			pg.icons1[i].setIcon(card_to_ImageIcon2(hands[0].remove(i).getImageFileName()));
+		pg.b41.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) { pg.refreshDisplay("b41"); player.placeBet(1);} } );
+
+		pg.b42.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) { pg.refreshDisplay("b42"); player.placeBet(2);} } );
+
+		pg.b43.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) { pg.refreshDisplay("b43"); player.placeBet(3);} } );
+
+		pg.b44.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) { pg.refreshDisplay("b44"); player.placeBet(4);} } );
+
+		pg.b45.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) { pg.refreshDisplay("b45"); player.placeBet(5);} } );
+		
+		pg.continueButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) { 
+				ArrayList<BaccaratParticipant> winners = baccaratGame.continueGame();
+				updateDisplay(winners, pg, player, banker); 
+				pg.continueButton.setEnabled(false); 
+				pg.nextButton.setEnabled(true); 
+			} 
+		} );
+
+
+		playRound(player, banker, pg, baccaratGame);
+		pg.nextButton.addActionListener(new ActionListener() {public void actionPerformed(ActionEvent e) { playRound(player, banker, pg, baccaratGame);} } );
+		
+	}
+	
+	public static void playRound(Player player, Banker banker, Baccarat_GUI_draft pg, BaccaratGame baccaratGame){
+		pg.continueButton.setEnabled(false);
+		pg.nextButton.setEnabled(false);
+		
+		baccaratGame.startGame();
+
+		player.placeBet(1);
+
+		updateDisplay(null, pg, player, banker);
+		pg.continueButton.setEnabled(true);
+		
+	
+	}
+	
+	public static void updateDisplay(ArrayList<BaccaratParticipant> winners, Baccarat_GUI_draft pg, Player player, Banker banker){
+		// player card icons
+		pg.p211.removeAll();
+		for (int i = 0; i < player.getHand().length; i++) {	
+			pg.icons1[i] = new JLabel();
+			pg.icons1[i].setIcon(card_to_ImageIcon2(player.getHand()[i].getImageFileName()));
+			pg.icons1[i].setSize(30,30);
+			pg.p211.add(pg.icons1[i]);
 		}
 		
-		for (int i = 0; i < hands[1].size(); i++) {
-			pg.icons2[i].setIcon(card_to_ImageIcon2(hands[1].remove(i).getImageFileName()));
+		
+		// bank card icons
+		pg.p222.removeAll();
+		for (int i = 0; i < banker.getHand().length; i++) {
+			pg.icons2[i] = new JLabel();
+			pg.icons2[i].setIcon(card_to_ImageIcon2(banker.getHand()[i].getImageFileName()));
+			pg.icons2[i].setSize(30,30);
+			pg.p222.add(pg.icons2[i]);
 		} 
 		
+		pg.l21.setText("Player     sum="+player.getHandValue()+"     purse="+ (player.getPurseValue()));
+		pg.l22.setText("Banker     sum="+ (banker.getHandValue()));
+		pg.l6.setText("Winner(s): "+ winners +"     =>  New purse: $"+ player.getPurseValue());
+		pg.l42.setText("Bet: $"+player.getBetAmount());
+
+		pg.setVisible(true);
 		pg.repaint();
-		
 	}
 	
 	public void refreshDisplay(String option){
@@ -188,12 +250,9 @@ public class Baccarat_GUI_draft extends JFrame {
 				bet = 4;
 			}else bet = 5;
 			l42.setText("Bet: $"+bet);
-			b41.disable();
-			b42.disable();
-			b51.enable();
-			nextButton.disable();
+//			continueButton.enable();
+//			nextButton.disable();
 		} else if(option.equals("b52")){
-			// implement second step of baccarat
 		} else if(option.equals("b51")){
 
 		} else if(option.equals("b6")){

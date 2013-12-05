@@ -5,7 +5,6 @@ import static baccarat.State.stood_pat;
 
 import java.util.ArrayList;
 
-import cards.Card;
 import cards.Deck;
 
 public class BaccaratGame {
@@ -20,7 +19,7 @@ public class BaccaratGame {
 		this.player = new Player(deck);
 	}
 	
-	public ArrayList<Card>[] startGame(){
+	public BaccaratParticipant[] startGame(){
 		
 		player.clearHand();
 		banker.clearHand();
@@ -28,15 +27,14 @@ public class BaccaratGame {
 		player.getFirstHand();
 		banker.getFirstHand();
 		
-		return new ArrayList[]{player.getHand(), banker.getHand()};		
+		return new BaccaratParticipant[]{player, banker};		
 	}
-	
-	public void continueGame(){				
+
+	public ArrayList<BaccaratParticipant> continueGame(){				
 
 		// 1. Check if it's a natural
 		if(checkIfNatural()){
-			winLogic();
-			return;
+			return winLogic();
 		}
 
 		// If Player has an initial total of 0–5, he draws a third card. 
@@ -56,11 +54,11 @@ public class BaccaratGame {
 			consulTableuPlayerStoodPat(banker);
 		}
 
-		winLogic();
+		return winLogic();
 
 	}
 	
-	private void winLogic(){
+	private ArrayList<BaccaratParticipant> winLogic(){
 		
 		ArrayList<BaccaratParticipant> winners = null;
 
@@ -68,7 +66,7 @@ public class BaccaratGame {
 		
 		if(winners.contains(player) && !winners.contains(banker) ){
 			player.executeBetWon(true);
-		} else if (!winners.contains(banker)){
+		} else if (winners.contains(banker) && !winners.contains(player)){
 			player.executeBetWon(false);
 		}
 
@@ -78,8 +76,7 @@ public class BaccaratGame {
 		
 		System.out.println("\n");
 		
-		player.clearHand();
-		banker.clearHand();		
+		return winners;
 		
 	}
 	
